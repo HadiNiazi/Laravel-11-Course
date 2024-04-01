@@ -1,0 +1,10 @@
+Course Assets
+
+
+* Bootstrap website:
+https://getbootstrap.com/docs/5.3/getting-started/introduction
+
+* Get this series source code:
+https://github.com/HadiNiazi/Laravel-11-Course
+
+*

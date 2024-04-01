@@ -7,10 +7,12 @@
 
             <div class="card">
                 <div class="card-header bg-info">
-                  Homepage
+                  Show Post
                 </div>
                 <div class="card-body">
-                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                    Post Id is {{ $id }}
+
                 </div>
             </div>
 
@@ -18,10 +20,3 @@
     </div>
 </div>
 @endsection
-
-
-
-
-
-
-
