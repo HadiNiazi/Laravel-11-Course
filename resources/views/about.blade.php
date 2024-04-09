@@ -1,6 +1,8 @@
 
 @extends('layouts.site')
 
+@section('title', 'About us page')
+
 @section('content')
 
 <div class="container">

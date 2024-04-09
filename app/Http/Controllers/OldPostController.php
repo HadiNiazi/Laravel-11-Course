@@ -4,43 +4,74 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Posts\CreateRequest;
 use App\Http\Requests\Posts\UpdateRequest;
-use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+        // $posts = Post::all();
+        // 'select * from posts';
+
         $posts = Post::paginate(10);
 
         return view('posts.index', compact('posts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('posts.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CreateRequest $request)
     {
         $title = $request->title;
         $description = $request->description;
 
+        // var_dump($title);
+        // die();
+
+        // dd($title, $description);
+
+        // == Raq Queries == //
+        // DB::insert('insert into posts (title, description, status) values (?, ?, ?)', [$title, $description, true]);
+
+        // == Query Builder == //
+        // DB::table('posts')->insert([
+        //     'title' => $title,
+        //     'description' => $description,
+        //     'status' => true
+        // ]);
+
+        // return DB::table('posts')->get();
+
+        // == Query builder with raw queries too == //
+        // return DB::table('posts')
+        //         ->whereRaw('status = false')
+        //         ->get();
+
+
+        // == Eloquent or ORM or Model == //
+        // Post::create([
+        //     'title' => $title,
+        //     'description' => $description
+        // ]);
+
+
+        // Validting the user data
+
         try {
 
+            // if ($request->hasFile('image')) {
             if ($file = $request->image) {
 
                 $extension = $file->getClientOriginalExtension();
+                // $fileName = time(). rand(10000, 1000000). '.'. $extension;
+
+                // $file->move('dummy'. $fileName, $file);
 
                 $fileNameWithPath = Storage::disk('public')->put('/uploads/images', $file);
 
@@ -52,21 +83,43 @@ class PostController extends Controller
 
             }
 
+
+
         }
         catch(\Exception $ex) {
+
+            // return back()->withErrors('Error is '.$ex->getMessage());
+
             return back()->withErrors('Something went wrong, Please refresh the webpage and try again. If still problem persists contact with administrator');
+
+
         }
+
+
+
+
+        // session()->put('user', 'User is saved');
+
+        // session()->forget('user');
+
+        // session()->flush();
+
+        // session()->get('user');
 
         session()->flash('success_msg', 'Post Saved Successfully!');
 
+        // return redirect()->route('posts.create');
+
         return to_route('posts.index');
+
+        // return back();
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(int $id)
+    public function show($id)
     {
+        // $post = Post::findOrFail($id);
+
         $post = Post::find($id);
 
         if (! $post) {
@@ -76,10 +129,7 @@ class PostController extends Controller
         return view('posts.show', compact('post'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(int $id)
+    public function edit($id)
     {
         $post = Post::find($id);
 
@@ -90,10 +140,7 @@ class PostController extends Controller
         return view('posts.edit', compact('post'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateRequest $request, int $id)
+    public function update(UpdateRequest $request, $id)
     {
         $post = Post::find($id);
 
@@ -118,12 +165,10 @@ class PostController extends Controller
         session()->flash('success_msg', 'Post Updated Successfully');
 
         return to_route('posts.index');
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id)
+    public function destroy($id)
     {
         $post = Post::find($id);
 
@@ -147,4 +192,5 @@ class PostController extends Controller
 
         return to_route('posts.index');
     }
+
 }

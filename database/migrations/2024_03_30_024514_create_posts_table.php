@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); // id primary
             $table->string('title');
             $table->text('description');
+            $table->text('image');
             $table->timestamps(); // created_at updated_at
 
         });

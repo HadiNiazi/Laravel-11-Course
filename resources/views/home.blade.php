@@ -1,5 +1,7 @@
 @extends('layouts.site')
 
+@section('title', 'Homepage')
+
 @section('content')
 <div class="container">
     <div class="row">
