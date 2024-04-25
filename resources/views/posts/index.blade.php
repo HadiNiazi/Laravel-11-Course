@@ -56,6 +56,7 @@
                                         {{-- {{ $post->status == 1 ? 'published': 'draft' }} --}}
 
                                         <td>
+
                                             @if($post->status == 1)
                                                 <span class="badge text-bg-primary" style="font-size: 11px">published</span>
                                             @else

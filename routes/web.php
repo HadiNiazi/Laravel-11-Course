@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-
+use App\Http\Controllers\UserController;
 
 // Route::get('/', function(){
 
@@ -97,3 +97,4 @@ Route::get('/about', function() {
 // Route::delete('posts/destroy/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 
 Route::resource('posts', PostController::class);
+Route::get('users', [PostController::class, 'users'])->name('users');

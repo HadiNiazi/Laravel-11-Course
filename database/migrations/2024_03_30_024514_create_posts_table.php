@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id(); // id primary
+            $table->foreignId('user_id')->constrained();
             $table->string('title');
             $table->text('description');
             $table->text('image');

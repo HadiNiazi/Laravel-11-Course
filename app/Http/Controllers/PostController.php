@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Posts\CreateRequest;
 use App\Http\Requests\Posts\UpdateRequest;
 use App\Models\Post;
+use App\Models\Scopes\PublishedScope;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,7 +17,12 @@ class PostController extends Controller
      */
     public function index()
     {
+        // withoutGlobalScope(new PublishedScope)
+        // ->toArray()
+        // published()->
         $posts = Post::paginate(10);
+
+        // dd($posts);
 
         return view('posts.index', compact('posts'));
     }
@@ -35,6 +42,7 @@ class PostController extends Controller
     {
         $title = $request->title;
         $description = $request->description;
+        // dd($request->image);
 
         try {
 
@@ -146,5 +154,45 @@ class PostController extends Controller
         session()->flash('success_msg', 'Post Removed!');
 
         return to_route('posts.index');
+    }
+
+    public function users()
+    {
+        // === hasOne relationship
+
+        // $user = User::find(1)->post;
+
+        // dd($user);
+
+        // === inverse - belongsTo
+
+        // $post = Post::find(1)->user;
+
+        // dd($post);
+
+        // === One to Many
+
+        // $user = User::find(1);
+
+        // dd($user->posts);
+
+        // === One to Many - Inverse
+
+        // $post = Post::find(1);
+
+        // dd($post->user);
+
+        // === Many to Many
+
+        // $post = Post::find(1);
+
+        // dd($post->users);
+
+
+        $user = User::find(1);
+
+        dd($user->posts);
+
+
     }
 }
