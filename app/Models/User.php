@@ -6,6 +6,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -64,6 +68,31 @@ class User extends Authenticatable
     public function posts():BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'post_user', 'user_id', 'post_id');
+    }
+
+    // public function postComment(): HasOneThrough
+    // {
+    //     return $this->hasOneThrough(Comment::class, Post::class, 'user_id', 'post_id', 'id', 'id');
+    // }
+
+    public function postComment(): HasOneThrough
+    {
+        return $this->hasOneThrough(Comment::class, Post::class);
+    }
+
+    public function postComments(): HasManyThrough
+    {
+        return $this->hasManyThrough(Comment::class, Post::class);
+    }
+
+    public function image():MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 
 }

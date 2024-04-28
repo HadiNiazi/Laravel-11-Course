@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Posts\CreateRequest;
 use App\Http\Requests\Posts\UpdateRequest;
+use App\Models\Comment;
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\Scopes\PublishedScope;
 use App\Models\User;
@@ -189,9 +191,59 @@ class PostController extends Controller
         // dd($post->users);
 
 
-        $user = User::find(1);
+        // $user = User::find(1);
 
-        dd($user->posts);
+        // dd($user->posts);
+
+
+        // === has One Through
+
+        // $user = User::find(1);
+
+        // dd($user->postComment);
+
+        // === has One through inverse
+
+        // $comment = Comment::find(1);
+
+        // dd($comment->commentUser);
+
+        // has Many Through
+
+        // $user = User::find(1);
+
+        // dd($user->postComments);
+
+        // Polymorphic relationships
+
+        // === One to One
+
+        // $post = Post::find(1);
+
+        // dd($post->image);
+
+        // $user = User::find(1);
+
+        // dd($user->image);
+
+        // $image = Image::find(2);
+
+        // dd($image->imageable);
+
+        // One Many Polymorphic relationship
+
+
+        // $post = Post::find(1);
+
+        // dd($post->images);
+
+
+        // $user = User::find(1);
+
+        // dd($user->images);
+
+        // === Many to Many polymorhphic
+
 
 
     }
