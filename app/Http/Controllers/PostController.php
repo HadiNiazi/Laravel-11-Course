@@ -9,6 +9,7 @@ use App\Models\Image;
 use App\Models\Post;
 use App\Models\Scopes\PublishedScope;
 use App\Models\User;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -244,6 +245,11 @@ class PostController extends Controller
 
         // === Many to Many polymorhphic
 
+        // $post = Post::first();
+
+        $video = Video::first();
+
+        dd($video->tags);
 
 
     }
