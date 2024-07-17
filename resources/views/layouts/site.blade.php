@@ -29,14 +29,19 @@
               </li>
 
               <li class="nav-item">
-                <a class="nav-link {{ Request::path() == 'posts' ? 'active': '' }}" href="{{ route('posts.index') }}">Posts</a>
+                <a class="nav-link {{ Request::path() == 'admin/posts' ? 'active': '' }}" href="{{ route('admin.posts.index') }}">Posts</a>
               </li>
 
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+
+                @auth()
+                    <a href="{{ route('dashboard') }}" class="btn btn-outline-primary">Dashboard</a> &nbsp;
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-primary">Login</a> &nbsp;
+                    <a href="{{ route('register') }}" class="btn btn-outline-info">Register</a>
+                @endauth
+
+
           </div>
         </div>
     </nav>

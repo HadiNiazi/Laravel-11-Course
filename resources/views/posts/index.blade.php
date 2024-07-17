@@ -21,7 +21,7 @@
 
             @endif
 
-            <a href="{{ route('posts.create') }}" class="btn btn-info btn-sm text-white mb-2">New Post</a>
+            <a href="{{ route('admin.posts.create') }}" class="btn btn-info btn-sm text-white mb-2">New Post</a>
 
             <div class="card">
                 <div class="card-header bg-info text-white">
@@ -65,9 +65,9 @@
                                         </td>
 
                                         <td style="display: flex">
-                                            <a href="{{ route('posts.show', $post->id) }}" class="btn btn-success btn-sm"> <i class="fas fa-eye"></i> </a> &nbsp;
-                                            <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a> &nbsp;
-                                            <form class="destroy-form" method="post" action="{{ route('posts.destroy', $post->id) }}">
+                                            <a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn-success btn-sm"> <i class="fas fa-eye"></i> </a> &nbsp;
+                                            <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a> &nbsp;
+                                            <form class="destroy-form" method="post" action="{{ route('admin.posts.destroy', $post->id) }}">
                                                 @csrf
                                                 @method('DELETE')
 

@@ -55,22 +55,28 @@ class PostController extends Controller
 
                 $fileNameWithPath = Storage::disk('public')->put('/uploads/images', $file);
 
+                // dd(auth()->user());
+
                 Post::create([
+                    'user_id' => auth()->id(),
                     'title' => $title,
                     'description' => $description,
                     'image' => $fileNameWithPath
                 ]);
 
+                session()->flash('success_msg', 'Post Saved Successfully!');
+
+                return to_route('admin.posts.index');
+
             }
 
         }
         catch(\Exception $ex) {
-            return back()->withErrors('Something went wrong, Please refresh the webpage and try again. If still problem persists contact with administrator');
+            // dd($ex->getMessage());
+            return back()->withInput()->with('alert_error' ,'Something went wrong, Please refresh the webpage and try again. If still problem persists contact with administrator');
         }
 
-        session()->flash('success_msg', 'Post Saved Successfully!');
 
-        return to_route('posts.index');
     }
 
     /**
@@ -128,7 +134,7 @@ class PostController extends Controller
 
         session()->flash('success_msg', 'Post Updated Successfully');
 
-        return to_route('posts.index');
+        return to_route('admin.posts.index');
     }
 
     /**
@@ -144,19 +150,19 @@ class PostController extends Controller
 
         // file exists and then delete
 
-        if (Storage::disk('public')->exists($post->image)) {
+        if ($post->image) {
+            if (Storage::disk('public')->exists($post->image)) {
+                // Storage::disk('public')->delete($post->image);
+                unlink(public_path('storage/'. $post->image));
 
-            // Storage::disk('public')->delete($post->image);
-
-            unlink(public_path('storage/'. $post->image));
-
+            }
         }
 
         $post->delete();
 
         session()->flash('success_msg', 'Post Removed!');
 
-        return to_route('posts.index');
+        return to_route('admin.posts.index');
     }
 
     public function users()

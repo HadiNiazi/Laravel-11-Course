@@ -20,7 +20,7 @@ class Post extends Model
 
     // protected $primaryKey = 'post_id';
 
-    protected $fillable = ['title', 'description', 'status', 'image'];
+    protected $fillable = ['user_id', 'title', 'description', 'status', 'image'];
 
     // protected $guarded = [];
 

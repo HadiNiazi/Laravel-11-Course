@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-8 offset-2 mt-5">
 
-            <a href="{{ route('posts.index') }}" class="btn btn-info btn-sm mb-2 text-white">Go Back</a>
+            <a href="{{ route('admin.posts.index') }}" class="btn btn-info btn-sm mb-2 text-white">Go Back</a>
 
             <div class="card">
                 <div class="card-header bg-info text-white">
@@ -34,7 +34,7 @@
 
                     @endif
 
-                    <form method="POST" action="{{ route('posts.update', $post->id) }}">
+                    <form method="POST" action="{{ route('admin.posts.update', $post->id) }}">
 
                         @csrf
                         @method('PATCH')

@@ -9,7 +9,7 @@
 
             {{-- <a href="{{ url()->previous() }}" class="btn btn-info btn-sm mb-2 text-white">Go Back</a> --}}
 
-            <a href="{{ route('posts.index') }}" class="btn btn-info btn-sm mb-2 text-white">Go Back</a>
+            <a href="{{ route('admin.posts.index') }}" class="btn btn-info btn-sm mb-2 text-white">Go Back</a>
 
             <div class="card">
 

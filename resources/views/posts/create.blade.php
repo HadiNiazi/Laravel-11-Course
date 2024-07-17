@@ -23,6 +23,12 @@
                         </div>
                     @endif --}}
 
+                    @if (session('alert_error'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('alert_error') }}
+                        </div>
+                    @endif
+
                     @if(session('success_msg'))
 
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -32,7 +38,7 @@
 
                     @endif
 
-                    <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.posts.store') }}" enctype="multipart/form-data">
 
                         @csrf
 
