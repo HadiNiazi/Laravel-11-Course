@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use DataTables;
+use App\Models\Post;
+use App\Models\User;
+use App\Models\Image;
+use App\Models\Video;
+use App\Models\Comment;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Events\PostStatusChanged;
+use App\Models\Scopes\PublishedScope;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Posts\CreateRequest;
 use App\Http\Requests\Posts\UpdateRequest;
-use App\Models\Comment;
-use App\Models\Image;
-use App\Models\Post;
-use App\Models\Scopes\PublishedScope;
-use App\Models\User;
-use App\Models\Video;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -23,11 +26,47 @@ class PostController extends Controller
         // withoutGlobalScope(new PublishedScope)
         // ->toArray()
         // published()->
-        $posts = Post::paginate(10);
+        // $posts = Post::paginate(10);
 
         // dd($posts);
 
-        return view('posts.index', compact('posts'));
+
+
+        // server side datatable
+
+        if (request()->ajax()) {
+            $data = Post::select('id', 'title', 'image', 'description', 'status');
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+
+                            $btn = '<a data-id="'.$row->id.'" href="javascript:void(0)" class="edit btn btn-danger btn-sm delBtn"><i class="fas fa-trash"></i></a>';
+
+                            return $btn;
+                    })
+                    ->addColumn('id', function($row){
+                        return $row->id;
+                    })
+                    ->editColumn('status', function($row){
+                        return $row->status == 1 ? 'Yes': 'No';
+                    })
+                    ->editColumn('description', function($row){
+                        return Str::limit($row->description, '15');
+                    })
+                    ->editColumn('title', function($row){
+                        return Str::limit($row->title, '15');
+                    })
+                    ->editColumn('image', function($row){
+                        $image = '<img src="'.'/storage/'.$row->image.'" style="width:50px">';
+
+                        return $image;
+                    })
+                    ->rawColumns(['action', 'image'])
+                    ->orderColumn('id', 'id $1')
+                    ->make(true);
+        }
+
+        return view('posts.index');
     }
 
     /**
@@ -64,16 +103,24 @@ class PostController extends Controller
                     'image' => $fileNameWithPath
                 ]);
 
-                session()->flash('success_msg', 'Post Saved Successfully!');
+                // $eventStatus = 2;
+                // // fire event
+                // PostStatusChanged::dispatch($post, $eventStatus);
 
-                return to_route('admin.posts.index');
+                // session()->flash('success_msg', 'Post Saved Successfully!');
+
+                return response()->json([
+                    'message' => 'Post saved successfully!'
+                ], 201);
 
             }
 
         }
         catch(\Exception $ex) {
-            // dd($ex->getMessage());
-            return back()->withInput()->with('alert_error' ,'Something went wrong, Please refresh the webpage and try again. If still problem persists contact with administrator');
+            dd($ex->getMessage());
+            return response()->json([
+                'error' => 'Something went wrong, Please refresh the webpage and try again. If still problem persists contact with administrator!'
+            ], 401);
         }
 
 
@@ -140,12 +187,17 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // public function destroy(Post $post) // $post make sure that post must match with the route key {post}
     public function destroy(int $id)
     {
+
         $post = Post::find($id);
 
         if (! $post) {
-            abort('404', 'Record not found');
+            return response()->json([
+                'error' => 'Record not found'
+            ], 404);
+            // abort('404', 'Record not found');
         }
 
         // file exists and then delete
@@ -160,9 +212,12 @@ class PostController extends Controller
 
         $post->delete();
 
-        session()->flash('success_msg', 'Post Removed!');
+        // session()->flash('success_msg', 'Post Removed!');
 
-        return to_route('admin.posts.index');
+        return response()->json([
+            'message' => 'Post deleted successfully!'
+        ], 201);
+        // return to_route('admin.posts.index');
     }
 
     public function users()
@@ -258,5 +313,18 @@ class PostController extends Controller
         dd($video->tags);
 
 
+    }
+
+    public function openRegularPosts()
+    {
+        $posts = Post::all(); // lazy loading
+
+        $posts = Post::with(['user'])->get();
+
+        // foreach($posts as $post) {
+        //     dd($post->user);
+        // }
+
+        return view('posts.regular', compact('posts'));
     }
 }

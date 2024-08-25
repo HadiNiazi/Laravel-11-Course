@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->as('admin.')->middleware('auth')->group(function() {
     Route::resource('posts', PostController::class);
+    Route::get('regular-posts', [PostController::class, 'openRegularPosts']);
     Route::get('users', [PostController::class, 'users'])->name('users');
 });
 

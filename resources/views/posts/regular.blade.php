@@ -75,18 +75,23 @@
                 <div class="card-body">
 
 
-                        <table class="table" id="posts_table">
+                        <table class="table">
                             <thead>
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Image</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Description</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Actions</th>
                             </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                @foreach ($posts as $post)
+                                    <tr>
+                                        <td>{{ $post->user->name }}</td>
+                                        <td>{{ $post->title }}</td>
+                                        <td>{{ $post->description }}</td>
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
 
                         </table>
 
@@ -101,114 +106,4 @@
 
 @section('scripts')
 <script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script>
-<script>
-    $(document).ready(function() {
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var table = $('#posts_table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('admin.posts.index') }}",
-
-            columns: [
-                {data: 'id', 'name': 'id'},
-                {data: 'image'},
-                {data: 'title'},
-                {data: 'description'},
-                {data: 'status'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
-
-        });
-
-
-        $('body').on('click', '.delBtn', function() {
-            let post_id = $(this).data('id');
-
-            if (confirm('Are you sure, you want to delete it!')) {
-                $.ajax({
-                    method: 'DELETE',
-                    url: '{{ route("admin.posts.destroy", "") }}' + '/'+ post_id,
-                    // data: {post_id},
-                    success: function(response) {
-
-                        if (response.message) {
-
-                            table.draw();
-
-                            $('#success_msg').show();
-                            $('#success_msg').html(response.message);
-                        }
-                    },
-                    error: function(error) {
-                        console.log(error)
-                    }
-                });
-            }
-
-        });
-
-        $('#saveBtn').click(function() {
-
-            $('.error_msgs').html('');
-
-            var formData = new FormData($('#post_form')[0]);
-
-            $.ajax({
-                method: 'POST',
-                url: '{{ route("admin.posts.store") }}',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-
-                    if (response.message) {
-
-                        $('#success_msg').show();
-                        $('#success_msg').html(response.message);
-
-                        $('#exampleModal').modal('hide');
-
-                        table.draw();
-                    }
-                },
-                error: function(error) {
-
-                    if (error.responseJSON.errors) {
-                        $('#title_error').html(error.responseJSON.errors.title);
-                        $('#description_error').html(error.responseJSON.errors.description);
-                        $('#image_error').html(error.responseJSON.errors.image);
-                    }
-
-
-                    // console.log(error.responseJSON.errors.image[0])
-                }
-            });
-
-        });
-
-        $('#new_post_btn').click(function() {
-            $('#post_form').trigger("reset");
-        });
-
-        // $('.deleteBtn').click(function(event) {
-
-        //     event.preventDefault();
-
-        //     if ( confirm('Are you sure you, want to delete it?') ) {
-
-        //         $('.destroy-form').submit();
-
-        //     }
-
-
-        // });
-
-    });
-</script>
 @endsection
