@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Image;
 use App\Models\Video;
 use App\Models\Comment;
+use App\Jobs\PostCreation;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Events\PostStatusChanged;
@@ -96,12 +97,7 @@ class PostController extends Controller
 
                 // dd(auth()->user());
 
-                Post::create([
-                    'user_id' => auth()->id(),
-                    'title' => $title,
-                    'description' => $description,
-                    'image' => $fileNameWithPath
-                ]);
+                PostCreation::dispatch($title, $description);
 
                 // $eventStatus = 2;
                 // // fire event
