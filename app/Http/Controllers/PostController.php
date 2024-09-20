@@ -323,4 +323,19 @@ class PostController extends Controller
 
         return view('posts.regular', compact('posts'));
     }
+
+    public function findPostDetails()
+    {
+        $post = Post::find(2310);
+
+        if (! $post) {
+            // abort(403, 'Post not found!');
+            // abort(404, 'Post not found!');
+
+            throw new \Exception('Something went wrong, Unable to find the post details');
+
+        }
+
+        dd($post);
+    }
 }

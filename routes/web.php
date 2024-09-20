@@ -30,4 +30,6 @@ Route::get('/about', function() {
     return 'About us';
 })->name('about-us');
 
+Route::get('find-post', [PostController::class, 'findPostDetails'])->name('find.post');
+
 require __DIR__.'/auth.php';
