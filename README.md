@@ -1,5 +1,5 @@
 <p align="center">
-<a href="https://www.youtube.com/playlist?list=PL9TPlJ_mMj-QU1bSdNZUmupN2Mh2luxSc" target="_blank">
+<a href="https://www.youtube.com/playlist?list=PL9TPlJ_mMj-RDxjfEZcfO4-VrkGR3bOZ3" target="_blank">
 Laravel Complete Course with Project
 </a>
 </p>
